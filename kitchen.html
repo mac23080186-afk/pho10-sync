@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Phở 10 – Bảng điều khiển bếp</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'kitchen-bg':    '#0F172A',
+            'kitchen-card':  '#1E293B',
+            'kitchen-border':'#334155',
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <!-- Firebase SDK (compat v10) — must load before firebase-init.js -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+</head>
+<body class="bg-kitchen-bg min-h-screen text-white flex flex-col">
+
+  <!-- ════════════════════════════════════════════════════════
+       AUTH OVERLAY — covers dashboard until Firebase confirms login
+       Default: visible (loading state). Hides on successful auth.
+  ════════════════════════════════════════════════════════ -->
+  <div id="auth-overlay"
+       class="fixed inset-0 z-[9990] bg-[#0F172A] flex items-center justify-center">
+
+    <!-- Loading spinner (shown while onAuthStateChanged hasn't fired yet) -->
+    <div id="auth-loading" class="text-center">
+      <i class="fa-solid fa-spinner fa-spin text-blue-400 text-3xl mb-3 block"></i>
+      <p class="text-slate-400 text-sm">Đang kiểm tra đăng nhập...</p>
+    </div>
+
+    <!-- Login card (hidden until Firebase confirms no user) -->
+    <div id="auth-form-card"
+         class="hidden bg-[#1E293B] border border-[#334155] rounded-2xl p-8
+                w-full max-w-sm mx-4 shadow-2xl">
+
+      <!-- Brand header -->
+      <div class="text-center mb-8">
+        <div class="w-16 h-16 rounded-2xl bg-blue-500/20 border border-blue-500/40
+                    flex items-center justify-center mx-auto mb-4">
+          <i class="fa-solid fa-utensils text-blue-400 text-2xl"></i>
+        </div>
+        <h2 class="text-white font-black text-2xl">Phở 10 — Bếp</h2>
+        <p class="text-slate-400 text-sm mt-1">Đăng nhập để vào bảng điều khiển</p>
+      </div>
+
+      <!-- Form fields -->
+      <div class="space-y-4">
+        <div>
+          <label class="text-slate-400 text-xs uppercase tracking-widest font-semibold block mb-1.5">
+            Email
+          </label>
+          <input id="auth-email" type="email" autocomplete="username"
+                 placeholder="kitchen@pho10.vn"
+                 class="w-full bg-[#0F172A] border border-[#334155] rounded-xl px-4 py-3
+                        text-white text-sm placeholder-slate-600
+                        focus:outline-none focus:border-blue-500 transition-colors">
+        </div>
+        <div>
+          <label class="text-slate-400 text-xs uppercase tracking-widest font-semibold block mb-1.5">
+            Mật khẩu
+          </label>
+          <input id="auth-password" type="password" autocomplete="current-password"
+                 placeholder="••••••••"
+                 class="w-full bg-[#0F172A] border border-[#334155] rounded-xl px-4 py-3
+                        text-white text-sm placeholder-slate-600
+                        focus:outline-none focus:border-blue-500 transition-colors">
+        </div>
+
+        <!-- Error message -->
+        <p id="auth-error"
+           class="text-red-400 text-xs text-center hidden bg-red-500/10
+                  border border-red-500/30 rounded-lg px-3 py-2">
+        </p>
+
+        <!-- Submit button -->
+        <button id="auth-submit"
+                class="w-full bg-blue-600 hover:bg-blue-500 active:bg-blue-700
+                       text-white font-bold py-3.5 rounded-xl text-sm
+                       transition-all duration-150 active:scale-95 mt-2
+                       flex items-center justify-center gap-2">
+          <i class="fa-solid fa-right-to-bracket"></i>
+          Đăng nhập
+        </button>
+      </div>
+
+      <p class="text-slate-600 text-xs text-center mt-6">
+        <i class="fa-solid fa-lock mr-1"></i>Chỉ dành cho nhân viên bếp
+      </p>
+    </div>
+  </div>
+
+  <!-- Top Header Bar -->
+  <header class="bg-kitchen-card border-b border-kitchen-border px-6 py-3 flex items-center justify-between flex-shrink-0">
+    <div class="flex items-center gap-3">
+      <a href="index.html"
+         class="text-slate-400 hover:text-white transition-colors flex items-center gap-1.5 text-sm">
+        <i class="fa-solid fa-arrow-left"></i>
+        <span>Trang chủ</span>
+      </a>
+      <div class="w-px h-5 bg-slate-600 mx-1"></div>
+      <i class="fa-solid fa-utensils text-blue-400 text-xl"></i>
+      <div>
+        <h1 class="font-black text-white text-lg leading-tight">Phở 10 — Bếp</h1>
+        <p class="text-slate-400 text-xs">Bảng điều khiển vận hành</p>
+      </div>
+    </div>
+    <div class="flex items-center gap-4">
+      <span id="kitchen-clock" class="text-slate-300 text-sm font-mono tabular-nums"></span>
+      <span class="bg-green-600 text-white text-xs font-semibold px-3 py-1 rounded-full flex items-center gap-1.5">
+        <span class="w-1.5 h-1.5 rounded-full bg-green-300 inline-block"></span>
+        Trực tuyến
+      </span>
+      <button id="btn-logout"
+              class="hidden text-slate-400 hover:text-white text-sm
+                     flex items-center gap-1.5 border border-slate-600
+                     hover:border-slate-400 rounded-lg px-3 py-1.5 transition-colors">
+        <i class="fa-solid fa-right-from-bracket"></i>
+        <span>Đăng xuất</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- KPI Cards Row -->
+  <section id="kpi-row" aria-label="Chỉ số vận hành" class="px-6 pt-5 pb-4 grid grid-cols-3 gap-4 flex-shrink-0">
+
+    <article class="bg-kitchen-card rounded-2xl p-5 border border-kitchen-border">
+      <div class="flex items-start justify-between mb-3">
+        <p class="text-slate-400 text-xs uppercase tracking-widest font-semibold">Đơn đang chờ</p>
+        <div class="w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center">
+          <i class="fa-solid fa-ticket text-blue-400"></i>
+        </div>
+      </div>
+      <p id="kpi-orders" class="text-white text-5xl font-black tabular-nums leading-none">0</p>
+      <p class="text-slate-500 text-xs mt-2">đơn đang chờ nấu</p>
+    </article>
+
+    <article class="bg-kitchen-card rounded-2xl p-5 border border-kitchen-border">
+      <div class="flex items-start justify-between mb-3">
+        <p class="text-slate-400 text-xs uppercase tracking-widest font-semibold">Bàn hoạt động</p>
+        <div class="w-10 h-10 rounded-xl bg-green-500/20 flex items-center justify-center">
+          <i class="fa-solid fa-chair text-green-400"></i>
+        </div>
+      </div>
+      <p id="kpi-tables" class="text-white text-5xl font-black tabular-nums leading-none">0</p>
+      <p class="text-slate-500 text-xs mt-2">bàn đang có khách</p>
+    </article>
+
+    <article class="bg-kitchen-card rounded-2xl p-5 border border-red-500/30">
+      <div class="flex items-start justify-between mb-3">
+        <p class="text-slate-400 text-xs uppercase tracking-widest font-semibold">Chuông báo</p>
+        <div class="w-10 h-10 rounded-xl bg-red-500/20 flex items-center justify-center">
+          <i class="fa-solid fa-bell text-red-400"></i>
+        </div>
+      </div>
+      <p id="kpi-bells" class="text-white text-5xl font-black tabular-nums leading-none">0</p>
+      <p class="text-slate-500 text-xs mt-2">khách chờ quá lâu</p>
+    </article>
+
+  </section>
+
+  <!-- Main Body: Orders + Sidebar -->
+  <div class="px-6 pb-6 grid grid-cols-3 gap-4 flex-1 min-h-0">
+
+    <!-- Orders Panel (2/3) -->
+    <section id="section-orders" class="col-span-2 bg-kitchen-card rounded-2xl border border-kitchen-border flex flex-col overflow-hidden">
+
+      <!-- Panel Header -->
+      <div class="px-5 py-4 border-b border-kitchen-border flex items-center justify-between flex-shrink-0">
+        <h2 class="font-bold text-white text-base flex items-center gap-2">
+          <i class="fa-solid fa-list-check text-blue-400"></i>
+          Hàng đợi nấu ăn
+        </h2>
+        <span class="text-slate-500 text-xs">Gộp theo tên món</span>
+      </div>
+
+      <!-- Column Headers -->
+      <div class="px-5 py-2.5 grid grid-cols-12 gap-2 text-xs text-slate-500 uppercase tracking-widest border-b border-kitchen-border flex-shrink-0">
+        <span class="col-span-4">Tên món · Bàn chờ</span>
+        <span class="col-span-2 text-center">Tổng</span>
+        <span class="col-span-3">Bưng ra trước</span>
+        <span class="col-span-3 text-right">Thao tác</span>
+      </div>
+
+      <!-- Orders List (scrollable) -->
+      <div id="orders-list" class="divide-y divide-kitchen-border overflow-y-auto flex-1">
+        <div class="px-5 py-10 text-center text-slate-500">
+          <i class="fa-solid fa-bowl-hot text-4xl mb-3 block text-slate-700"></i>
+          <p class="text-sm font-medium">Chưa có đơn hàng mới</p>
+          <p class="text-xs mt-1 text-slate-600">Đơn hàng từ khách sẽ xuất hiện ở đây</p>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- Right Sidebar -->
+    <aside class="col-span-1 space-y-4 flex flex-col min-h-0">
+
+      <!-- Bell Alerts -->
+      <section id="section-bells"
+               class="bg-kitchen-card rounded-2xl border border-red-500/40 flex flex-col overflow-hidden">
+        <div class="px-4 py-3 border-b border-red-500/30 flex items-center justify-between flex-shrink-0">
+          <h2 class="font-bold text-white text-sm flex items-center gap-2">
+            <i class="fa-solid fa-bell text-red-400"></i>
+            Chuông báo khách
+          </h2>
+          <span id="bell-badge"
+                class="bg-red-500 text-white text-xs font-black min-w-[20px] h-5 px-1.5 rounded-full
+                       flex items-center justify-center hidden">
+            0
+          </span>
+        </div>
+        <div id="bell-list" class="p-3 space-y-2 overflow-y-auto flex-1">
+          <p class="text-slate-500 text-xs text-center py-4">Không có chuông báo</p>
+        </div>
+      </section>
+
+      <!-- Inventory Management -->
+      <section id="section-inventory"
+               class="bg-kitchen-card rounded-2xl border border-kitchen-border flex flex-col overflow-hidden flex-1">
+        <div class="px-4 py-3 border-b border-kitchen-border flex-shrink-0">
+          <h2 class="font-bold text-white text-sm flex items-center gap-2">
+            <i class="fa-solid fa-boxes-stacked text-blue-400"></i>
+            Quản lý tồn kho
+          </h2>
+        </div>
+        <div id="inventory-list" class="p-3 space-y-2 overflow-y-auto flex-1">
+          <!-- Injected by kitchen.js -->
+          <p class="text-slate-500 text-xs text-center py-4">
+            <i class="fa-solid fa-spinner fa-spin mr-1"></i>Đang tải...
+          </p>
+        </div>
+      </section>
+
+    </aside>
+
+  </div>
+
+  <script src="js/firebase-init.js"></script>
+  <script src="js/script.js"></script>
+  <script src="js/kitchen.js"></script>
+
+  <!-- ════════════════════════════════════════════════════════
+       AUTH LOGIC — runs after Firebase is initialized
+  ════════════════════════════════════════════════════════ -->
+  <script>
+  (function () {
+    const auth        = window._pho10Auth;
+    const overlay     = document.getElementById('auth-overlay');
+    const loadingEl   = document.getElementById('auth-loading');
+    const formCardEl  = document.getElementById('auth-form-card');
+    const emailEl     = document.getElementById('auth-email');
+    const passEl      = document.getElementById('auth-password');
+    const submitEl    = document.getElementById('auth-submit');
+    const errorEl     = document.getElementById('auth-error');
+    const logoutEl    = document.getElementById('btn-logout');
+
+    // ── Auth state observer ──────────────────────────────────
+    auth.onAuthStateChanged(function (user) {
+      if (user) {
+        overlay.style.display = 'none';
+        logoutEl.classList.remove('hidden');
+      } else {
+        overlay.style.display = 'flex';
+        logoutEl.classList.add('hidden');
+        // Switch from loading spinner → login form
+        loadingEl.classList.add('hidden');
+        formCardEl.classList.remove('hidden');
+      }
+    });
+
+    // ── Login ────────────────────────────────────────────────
+    submitEl.addEventListener('click', handleLogin);
+    passEl.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') handleLogin();
+    });
+
+    function handleLogin() {
+      const email    = emailEl.value.trim();
+      const password = passEl.value;
+      errorEl.classList.add('hidden');
+
+      if (!email || !password) {
+        showError('Vui lòng nhập email và mật khẩu.');
+        return;
+      }
+
+      submitEl.disabled = true;
+      submitEl.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Đang đăng nhập...';
+
+      auth.signInWithEmailAndPassword(email, password)
+        .catch(function (err) {
+          submitEl.disabled = false;
+          submitEl.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> Đăng nhập';
+          const code = err.code;
+          const msg =
+            (code === 'auth/invalid-credential' ||
+             code === 'auth/wrong-password'      ||
+             code === 'auth/user-not-found')
+              ? 'Email hoặc mật khẩu không đúng.'
+              : code === 'auth/too-many-requests'
+              ? 'Quá nhiều lần thử. Vui lòng thử lại sau.'
+              : 'Đăng nhập thất bại. Kiểm tra kết nối mạng.';
+          showError(msg);
+        });
+    }
+
+    function showError(msg) {
+      errorEl.textContent = msg;
+      errorEl.classList.remove('hidden');
+    }
+
+    // ── Logout ───────────────────────────────────────────────
+    logoutEl.addEventListener('click', function () {
+      auth.signOut();
+    });
+  })();
+  </script>
+</body>
+</html>

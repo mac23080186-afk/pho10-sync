@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Phở 10 Sync – Chọn vai trò</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand:         '#D62828',
+            'brand-dark':  '#B71C1C',
+            'kitchen-bg':  '#0F172A',
+            'kitchen-card':'#1E293B',
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="min-h-screen bg-gradient-to-br from-red-800 via-red-700 to-red-900 flex items-center justify-center p-4">
+
+  <main class="w-full max-w-md">
+
+    <!-- Logo / Branding -->
+    <header class="text-center mb-10">
+      <div class="text-white text-6xl mb-4">
+        <i class="fa-solid fa-bowl-hot"></i>
+      </div>
+      <h1 class="text-white text-5xl font-black tracking-tight">Phở 10</h1>
+      <p class="text-red-200 text-lg mt-2 font-medium">Hệ thống đồng bộ nhà hàng</p>
+      <p class="text-red-400 text-xs mt-1 uppercase tracking-widest">Digital Transformation MVP</p>
+    </header>
+
+    <!-- Role Selection -->
+    <section aria-label="Chọn vai trò">
+      <p class="text-red-300 text-center text-sm uppercase tracking-widest mb-5 font-medium">
+        Bạn là ai?
+      </p>
+
+      <div class="flex flex-col gap-4">
+
+        <!-- Customer -->
+        <a href="customer.html?table=1" id="btn-customer"
+           class="role-card bg-white rounded-2xl shadow-2xl p-6 flex items-center gap-5
+                  hover:scale-[1.02] active:scale-95 transition-transform duration-150">
+          <div class="w-16 h-16 rounded-2xl bg-red-50 flex items-center justify-center flex-shrink-0">
+            <i class="fa-solid fa-user text-brand text-2xl"></i>
+          </div>
+          <div class="flex-1">
+            <p class="text-gray-900 font-bold text-xl leading-tight">Khách hàng</p>
+            <p class="text-gray-500 text-sm mt-0.5">Đặt món &amp; theo dõi đơn hàng</p>
+          </div>
+          <i class="fa-solid fa-chevron-right text-gray-300 text-lg"></i>
+        </a>
+
+        <!-- Kitchen / Manager -->
+        <a href="kitchen.html" id="btn-kitchen"
+           class="role-card bg-kitchen-card rounded-2xl shadow-2xl p-6 flex items-center gap-5
+                  hover:scale-[1.02] active:scale-95 transition-transform duration-150
+                  border border-slate-700">
+          <div class="w-16 h-16 rounded-2xl bg-slate-700 flex items-center justify-center flex-shrink-0">
+            <i class="fa-solid fa-utensils text-blue-400 text-2xl"></i>
+          </div>
+          <div class="flex-1">
+            <p class="text-white font-bold text-xl leading-tight">Bếp / Quản lý</p>
+            <p class="text-slate-400 text-sm mt-0.5">Bảng điều khiển vận hành bếp</p>
+          </div>
+          <i class="fa-solid fa-chevron-right text-slate-600 text-lg"></i>
+        </a>
+
+      </div>
+    </section>
+
+    <footer class="text-center mt-10 space-y-1">
+      <p class="text-red-400 text-xs">Digital Transformation · Final Group 5</p>
+      <p class="text-red-500 text-xs">Chạy hoàn toàn trên trình duyệt · Không cần backend</p>
+    </footer>
+
+  </main>
+
+  <script src="js/script.js"></script>
+</body>
+</html>

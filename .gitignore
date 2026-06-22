@@ -1,0 +1,20 @@
+# ══════════════════════════════════════════════════
+#  Phở 10 Sync — .gitignore
+#  NEVER commit credentials or secrets to git.
+# ══════════════════════════════════════════════════
+
+# Firebase Admin SDK service account key (server-side only, NEVER browser)
+*.json
+.env
+.env.*
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+
+# Node (should never exist in this project, but guard anyway)
+node_modules/
+package-lock.json

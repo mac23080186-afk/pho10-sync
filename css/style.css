@@ -1,0 +1,248 @@
+/* Phở 10 Sync — Shared Styles */
+
+:root {
+  --color-brand:          #D62828;
+  --color-brand-dark:     #B71C1C;
+  --color-kitchen-bg:     #0F172A;
+  --color-kitchen-card:   #1E293B;
+  --color-kitchen-border: #334155;
+  --color-text:           #1A1A1A;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Role selection cards */
+.role-card {
+  display: flex;
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Status badge variants */
+.badge-waiting  { color: #92400E; background-color: #FEF3C7; }
+.badge-progress { color: #1E40AF; background-color: #DBEAFE; }
+.badge-served   { color: #166534; background-color: #DCFCE7; }
+
+/* Bell button — active (threshold elapsed, not yet pressed) */
+.bell-active {
+  background-color: var(--color-brand) !important;
+  color: white !important;
+  box-shadow: 0 0 0 0 rgba(214, 40, 40, 0.5);
+  animation: bell-pulse 1.8s ease-in-out infinite;
+}
+
+/* Bell button — pressed (once) */
+.bell-pressed {
+  background-color: #6B7280 !important;
+  color: white !important;
+  cursor: not-allowed !important;
+}
+
+@keyframes bell-pulse {
+  0%   { box-shadow: 0 0 0 0   rgba(214, 40, 40, 0.5); }
+  70%  { box-shadow: 0 0 0 16px rgba(214, 40, 40, 0);   }
+  100% { box-shadow: 0 0 0 0   rgba(214, 40, 40, 0);   }
+}
+
+/* Kitchen toast notification */
+.toast {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 9999;
+  background-color: #EF4444;
+  color: white;
+  padding: 0.75rem 1.25rem;
+  border-radius: 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  box-shadow: 0 8px 24px rgba(239, 68, 68, 0.4);
+  animation: toast-in 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.toast.toast-exit {
+  animation: toast-out 0.25s ease-in forwards;
+}
+
+@keyframes toast-in {
+  from { transform: translateX(120%); opacity: 0; }
+  to   { transform: translateX(0);   opacity: 1; }
+}
+
+@keyframes toast-out {
+  from { transform: translateX(0);   opacity: 1; }
+  to   { transform: translateX(120%); opacity: 0; }
+}
+
+/* Kitchen — bell alert panel flash */
+@keyframes bell-alert-flash {
+  0%,100% { box-shadow: none;                              border-color: rgba(239,68,68,0.4); }
+  25%,75%  { box-shadow: 0 0 0 4px rgba(239,68,68,0.65); border-color: #EF4444; }
+  50%      { box-shadow: 0 0 0 10px rgba(239,68,68,0.2); border-color: #EF4444; }
+}
+
+.bell-flash-anim {
+  animation: bell-alert-flash 0.4s ease-in-out 3 !important;
+}
+
+/* Customer — status message fade-in */
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Inventory toggle switch */
+.toggle-switch {
+  position: relative;
+  display: inline-flex;
+  width: 44px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+
+.toggle-slider {
+  position: absolute;
+  inset: 0;
+  background-color: #4B5563;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.toggle-slider::after {
+  content: '';
+  position: absolute;
+  left: 3px;
+  top: 3px;
+  width: 18px;
+  height: 18px;
+  background: white;
+  border-radius: 50%;
+  transition: transform 0.2s;
+}
+
+.toggle-switch input:checked + .toggle-slider {
+  background-color: #22C55E;
+}
+
+.toggle-switch input:checked + .toggle-slider::after {
+  transform: translateX(20px);
+}
+
+/* Smooth scroll for order list */
+#orders-list, #bell-list, #inventory-list {
+  scrollbar-width: thin;
+  scrollbar-color: #334155 transparent;
+}
+
+/* ══════════════════════════════════════════════════════════
+   LOADING STATE — checkout button
+══════════════════════════════════════════════════════════ */
+.btn-loading {
+  position: relative;
+  overflow: hidden;
+  cursor: not-allowed !important;
+}
+.btn-loading::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg,
+    transparent 0%, rgba(255,255,255,0.15) 50%, transparent 100%);
+  background-size: 200% 100%;
+  animation: btn-shimmer 1.2s infinite;
+}
+@keyframes btn-shimmer {
+  from { background-position: -200% 0; }
+  to   { background-position:  200% 0; }
+}
+
+/* ══════════════════════════════════════════════════════════
+   SECTION REVEAL — sections that appear after checkout
+══════════════════════════════════════════════════════════ */
+@keyframes section-reveal {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.section-reveal { animation: section-reveal 0.45s cubic-bezier(0.22,1,0.36,1); }
+
+/* ══════════════════════════════════════════════════════════
+   KITCHEN EMPTY STATE
+══════════════════════════════════════════════════════════ */
+@keyframes float {
+  0%,100% { transform: translateY(0px); }
+  50%      { transform: translateY(-10px); }
+}
+@keyframes dot-pulse {
+  0%,80%,100% { transform: scale(0.5); opacity: 0.3; }
+  40%          { transform: scale(1.1); opacity: 1; }
+}
+
+/* ══════════════════════════════════════════════════════════
+   KPI NUMBER POP — animate when value changes
+══════════════════════════════════════════════════════════ */
+@keyframes kpi-pop {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.3); color: #FBBF24; }
+  100% { transform: scale(1); }
+}
+.kpi-pulse {
+  display: inline-block;
+  animation: kpi-pop 0.5s cubic-bezier(0.34,1.56,0.64,1);
+}
+
+/* ══════════════════════════════════════════════════════════
+   SUCCESS STATE — checkout button after lock
+══════════════════════════════════════════════════════════ */
+.btn-success {
+  background-color: #16A34A !important;
+  transition: background-color 0.4s ease;
+}
+
+/* ══════════════════════════════════════════════════════════
+   CUSTOMER — ticket header stripe
+══════════════════════════════════════════════════════════ */
+.ticket-header-stripe {
+  background: linear-gradient(135deg, #D62828 0%, #B71C1C 60%, #991B1B 100%);
+}
+
+/* ══════════════════════════════════════════════════════════
+   RESPONSIVE — CUSTOMER mobile (≤ 420px)
+══════════════════════════════════════════════════════════ */
+@media (max-width: 420px) {
+  /* Ensure content doesn't overflow on iPhone SE (375px) */
+  #section-ticket .text-7xl { font-size: 5rem; }
+  #btn-bell { width: 96px; height: 96px; }
+}
+
+/* ══════════════════════════════════════════════════════════
+   RESPONSIVE — KITCHEN tablet landscape (768px – 1280px)
+══════════════════════════════════════════════════════════ */
+@media (max-width: 960px) {
+  /* Tighten KPI gap on narrower tablets */
+  #kpi-row { gap: 10px; padding: 12px 16px; }
+}
+@media (min-width: 768px) {
+  /* Kitchen always fills the viewport — no scroll on outer body */
+  body.bg-kitchen-bg { overflow: hidden; height: 100vh; }
+}
