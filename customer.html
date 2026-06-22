@@ -27,7 +27,7 @@
 
   <!-- Sticky Red Header -->
   <header class="bg-brand sticky top-0 z-50 shadow-lg">
-    <div class="max-w-[420px] mx-auto px-4 py-3 flex items-center justify-between">
+    <div class="max-w-4xl mx-auto px-4 md:px-8 py-3 flex items-center justify-between">
       <a href="index.html"
          class="text-white text-sm flex items-center gap-1.5 opacity-80 hover:opacity-100 transition-opacity">
         <i class="fa-solid fa-arrow-left"></i>
@@ -37,116 +37,148 @@
         <h1 class="text-white font-black text-lg leading-tight">Phở 10</h1>
         <p class="text-red-200 text-xs">Vé xếp hàng điện tử</p>
       </div>
-      <!-- Spacer keeps title centered -->
       <div class="w-20"></div>
     </div>
   </header>
 
-  <!-- Page Content -->
-  <main class="max-w-[420px] mx-auto px-4 py-5 space-y-4">
+  <!-- Page Content — single column mobile / 2-column desktop -->
+  <main class="max-w-4xl mx-auto px-4 md:px-8 py-5">
+    <div class="grid grid-cols-1 md:grid-cols-2 md:gap-6 md:items-start">
 
-    <!-- Ticket Info Card -->
-    <section id="section-ticket" class="bg-white rounded-2xl shadow-lg overflow-hidden">
-      <div class="ticket-header-stripe px-5 py-5">
-        <p class="text-red-200 text-xs uppercase tracking-widest font-semibold">Số thứ tự của bạn</p>
-        <p id="queue-number-display"
-           class="text-white text-7xl font-black leading-none mt-1 tabular-nums">--</p>
-      </div>
-      <div class="px-5 py-3 flex items-center justify-between text-sm">
-        <span class="text-gray-600">
-          <i class="fa-solid fa-chair text-brand mr-1.5"></i>
-          Bàn: <strong id="table-number-display" class="text-gray-900">--</strong>
-        </span>
-        <span id="status-badge"
-              class="badge-waiting text-xs font-semibold px-3 py-1 rounded-full">
-          Chờ đặt món
-        </span>
-      </div>
-    </section>
+      <!-- ── LEFT COLUMN: Ticket + Menu ─────────────────── -->
+      <div class="space-y-4">
 
-    <!-- Menu Section -->
-    <section id="section-menu" class="bg-white rounded-2xl shadow-lg overflow-hidden">
-      <div class="px-5 py-4 border-b border-gray-100 flex items-center justify-between"
-           style="border-left:3px solid #D62828">
-        <h2 class="text-gray-900 font-bold text-base flex items-center gap-2">
-          <i class="fa-solid fa-bowl-hot text-brand"></i>
-          Thực đơn
-        </h2>
-        <span class="text-gray-400 text-xs">Chọn món bạn muốn</span>
-      </div>
+        <!-- Ticket Info Card -->
+        <section id="section-ticket" class="bg-white rounded-2xl shadow-lg overflow-hidden">
+          <div class="ticket-header-stripe px-5 py-5 md:py-7">
+            <p class="text-red-200 text-xs uppercase tracking-widest font-semibold">Số thứ tự của bạn</p>
+            <p id="queue-number-display"
+               class="text-white text-7xl md:text-8xl font-black leading-none mt-1 tabular-nums">--</p>
+          </div>
+          <div class="px-5 py-3 flex items-center justify-between text-sm">
+            <span class="text-gray-600">
+              <i class="fa-solid fa-chair text-brand mr-1.5"></i>
+              Bàn: <strong id="table-number-display" class="text-gray-900">--</strong>
+            </span>
+            <span id="status-badge"
+                  class="badge-waiting text-xs font-semibold px-3 py-1 rounded-full">
+              Chờ đặt món
+            </span>
+          </div>
+        </section>
 
-      <div id="menu-list" class="px-5 py-4 space-y-3">
-        <!-- Menu items injected by customer.js -->
-        <p class="text-gray-400 text-sm text-center py-4">
-          <i class="fa-solid fa-spinner fa-spin mr-1"></i>Đang tải thực đơn...
-        </p>
-      </div>
+        <!-- Menu Section -->
+        <section id="section-menu" class="bg-white rounded-2xl shadow-lg overflow-hidden">
+          <div class="px-5 py-4 border-b border-gray-100 flex items-center justify-between"
+               style="border-left:3px solid #D62828">
+            <h2 class="text-gray-900 font-bold text-base flex items-center gap-2">
+              <i class="fa-solid fa-bowl-hot text-brand"></i>
+              Thực đơn
+            </h2>
+            <span class="text-gray-400 text-xs">Chọn món bạn muốn</span>
+          </div>
 
-      <div class="px-5 pb-5">
-        <button id="btn-checkout"
-                class="w-full bg-brand text-white font-bold py-3.5 rounded-xl text-base
-                       hover:bg-brand-dark active:scale-95 transition-all duration-150
-                       disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed"
-                disabled>
-          <i class="fa-solid fa-bag-shopping mr-2"></i>Xác nhận đặt món
-        </button>
-      </div>
-    </section>
+          <div id="menu-list" class="px-5 py-4 space-y-3">
+            <p class="text-gray-400 text-sm text-center py-4">
+              <i class="fa-solid fa-spinner fa-spin mr-1"></i>Đang tải thực đơn...
+            </p>
+          </div>
 
-    <!-- Waiting / Countdown (hidden until order placed) -->
-    <section id="section-waiting" class="bg-white rounded-2xl shadow-lg overflow-hidden hidden">
-      <div class="px-5 py-4 border-b border-gray-100">
-        <h2 class="text-gray-900 font-bold text-base flex items-center gap-2">
-          <i class="fa-solid fa-hourglass-half text-brand"></i>
-          Thời gian chờ ước tính
-        </h2>
+          <div class="px-5 pb-5">
+            <button id="btn-checkout"
+                    class="w-full bg-brand text-white font-bold py-3.5 rounded-xl text-base
+                           hover:bg-brand-dark active:scale-95 transition-all duration-150
+                           disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed"
+                    disabled>
+              <i class="fa-solid fa-bag-shopping mr-2"></i>Xác nhận đặt món
+            </button>
+          </div>
+        </section>
+
       </div>
-      <div class="px-5 py-5 space-y-4">
-        <div class="text-center">
-          <p class="text-gray-400 text-xs uppercase tracking-widest mb-2">Còn lại</p>
-          <p id="countdown-display"
-             class="text-6xl font-black text-brand tabular-nums leading-none">05:00</p>
+      <!-- ── END LEFT COLUMN ─────────────────────────────── -->
+
+      <!-- ── RIGHT COLUMN: Status sections ─────────────── -->
+      <div class="space-y-4 mt-4 md:mt-0">
+
+        <!-- Desktop placeholder — visible before order, hidden after -->
+        <div id="right-col-placeholder"
+             class="hidden md:flex flex-col items-center justify-center gap-4
+                    bg-white rounded-2xl shadow-lg px-8 py-12 text-center">
+          <div class="w-16 h-16 rounded-full bg-red-50 flex items-center justify-center">
+            <i class="fa-solid fa-bowl-hot text-brand text-2xl"></i>
+          </div>
+          <div>
+            <p class="text-gray-700 font-semibold">Chọn món và đặt hàng</p>
+            <p class="text-gray-400 text-sm mt-1 leading-relaxed">
+              Trạng thái đơn hàng và thời gian chờ<br>sẽ hiển thị ở đây
+            </p>
+          </div>
+          <div class="flex gap-1.5 mt-2">
+            <span class="w-2 h-2 rounded-full bg-red-200" style="animation:dot-pulse 1.4s 0s ease-in-out infinite"></span>
+            <span class="w-2 h-2 rounded-full bg-red-200" style="animation:dot-pulse 1.4s 0.2s ease-in-out infinite"></span>
+            <span class="w-2 h-2 rounded-full bg-red-200" style="animation:dot-pulse 1.4s 0.4s ease-in-out infinite"></span>
+          </div>
         </div>
-        <div class="bg-gray-100 rounded-full h-3 overflow-hidden">
-          <div id="progress-bar"
-               class="bg-brand h-3 rounded-full transition-all duration-1000"
-               style="width: 0%"></div>
-        </div>
-        <p id="progress-label" class="text-gray-400 text-xs text-right">0% thời gian đã qua</p>
-      </div>
-    </section>
 
-    <!-- Bell Notification (hidden until threshold elapsed) -->
-    <section id="section-bell" class="bg-white rounded-2xl shadow-lg overflow-hidden hidden">
-      <div class="px-5 py-6 flex flex-col items-center gap-3">
-        <p class="text-gray-500 text-xs uppercase tracking-widest font-semibold">Chờ quá lâu?</p>
-        <button id="btn-bell"
-                class="flex flex-col items-center justify-center gap-2
-                       w-28 h-28 rounded-full bg-gray-100 text-gray-300
-                       transition-all duration-300 disabled:cursor-not-allowed"
-                disabled>
-          <i class="fa-solid fa-bell text-3xl"></i>
-          <span class="text-xs font-bold tracking-wide">Giục Bếp</span>
-        </button>
-        <p id="bell-status-label" class="text-gray-400 text-xs text-center max-w-[220px] leading-relaxed">
-          Nút gọi sẽ mở sau khi bạn chờ đủ thời gian
-        </p>
-      </div>
-    </section>
+        <!-- Waiting / Countdown (hidden until order placed) -->
+        <section id="section-waiting" class="bg-white rounded-2xl shadow-lg overflow-hidden hidden">
+          <div class="px-5 py-4 border-b border-gray-100">
+            <h2 class="text-gray-900 font-bold text-base flex items-center gap-2">
+              <i class="fa-solid fa-hourglass-half text-brand"></i>
+              Thời gian chờ ước tính
+            </h2>
+          </div>
+          <div class="px-5 py-5 space-y-4">
+            <div class="text-center">
+              <p class="text-gray-400 text-xs uppercase tracking-widest mb-2">Còn lại</p>
+              <p id="countdown-display"
+                 class="text-6xl font-black text-brand tabular-nums leading-none">05:00</p>
+            </div>
+            <div class="bg-gray-100 rounded-full h-3 overflow-hidden">
+              <div id="progress-bar"
+                   class="bg-brand h-3 rounded-full transition-all duration-1000"
+                   style="width: 0%"></div>
+            </div>
+            <p id="progress-label" class="text-gray-400 text-xs text-right">0% thời gian đã qua</p>
+          </div>
+        </section>
 
-    <!-- Order Status Panel (hidden until order placed) -->
-    <section id="section-status" class="bg-white rounded-2xl shadow-lg overflow-hidden hidden">
-      <div class="px-5 py-4 border-b border-gray-100">
-        <h2 class="text-gray-900 font-bold text-base flex items-center gap-2">
-          <i class="fa-solid fa-receipt text-brand"></i>
-          Đơn hàng của bạn
-        </h2>
-      </div>
-      <div id="order-status-display" class="px-5 py-4">
-        <p class="text-gray-400 text-sm text-center py-2">Chưa có đơn hàng</p>
-      </div>
-    </section>
+        <!-- Bell Notification (hidden until threshold elapsed) -->
+        <section id="section-bell" class="bg-white rounded-2xl shadow-lg overflow-hidden hidden">
+          <div class="px-5 py-6 flex flex-col items-center gap-3">
+            <p class="text-gray-500 text-xs uppercase tracking-widest font-semibold">Chờ quá lâu?</p>
+            <button id="btn-bell"
+                    class="flex flex-col items-center justify-center gap-2
+                           w-28 h-28 rounded-full bg-gray-100 text-gray-300
+                           transition-all duration-300 disabled:cursor-not-allowed"
+                    disabled>
+              <i class="fa-solid fa-bell text-3xl"></i>
+              <span class="text-xs font-bold tracking-wide">Giục Bếp</span>
+            </button>
+            <p id="bell-status-label" class="text-gray-400 text-xs text-center max-w-[220px] leading-relaxed">
+              Nút gọi sẽ mở sau khi bạn chờ đủ thời gian
+            </p>
+          </div>
+        </section>
 
+        <!-- Order Status Panel (hidden until order placed) -->
+        <section id="section-status" class="bg-white rounded-2xl shadow-lg overflow-hidden hidden">
+          <div class="px-5 py-4 border-b border-gray-100">
+            <h2 class="text-gray-900 font-bold text-base flex items-center gap-2">
+              <i class="fa-solid fa-receipt text-brand"></i>
+              Đơn hàng của bạn
+            </h2>
+          </div>
+          <div id="order-status-display" class="px-5 py-4">
+            <p class="text-gray-400 text-sm text-center py-2">Chưa có đơn hàng</p>
+          </div>
+        </section>
+
+      </div>
+      <!-- ── END RIGHT COLUMN ────────────────────────────── -->
+
+    </div>
   </main>
 
   <script src="js/firebase-init.js"></script>

@@ -230,9 +230,35 @@ a {
    RESPONSIVE — CUSTOMER mobile (≤ 420px)
 ══════════════════════════════════════════════════════════ */
 @media (max-width: 420px) {
-  /* Ensure content doesn't overflow on iPhone SE (375px) */
   #section-ticket .text-7xl { font-size: 5rem; }
   #btn-bell { width: 96px; height: 96px; }
+}
+
+/* ══════════════════════════════════════════════════════════
+   RESPONSIVE — CUSTOMER desktop (≥ 768px)
+══════════════════════════════════════════════════════════ */
+@media (min-width: 768px) {
+  /* Larger queue number in wider left column */
+  #queue-number-display { font-size: 6rem; }
+
+  /* Menu item rows — slightly more breathing room */
+  #menu-list article { padding-top: 14px; padding-bottom: 14px; }
+
+  /* Quantity buttons — slightly larger touch target on desktop */
+  .qty-btn { width: 40px; height: 40px; }
+
+  /* Checkout button — less aggressive on desktop hover */
+  #btn-checkout { font-size: 1rem; }
+
+  /* Right column sections — consistent card height feel */
+  #section-waiting .px-5 { padding-top: 28px; padding-bottom: 28px; }
+
+  /* Bell button — slightly larger on desktop */
+  #btn-bell { width: 128px; height: 128px; }
+  #btn-bell .fa-bell { font-size: 2rem; }
+
+  /* Float toast — center bottom regardless of column */
+  /* (already positioned fixed, works fine) */
 }
 
 /* ══════════════════════════════════════════════════════════

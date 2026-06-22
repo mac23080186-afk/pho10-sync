@@ -230,6 +230,10 @@
     dom.btnCheckout.classList.add('btn-success');
     dom.btnCheckout.innerHTML = '<i class="fa-solid fa-circle-check mr-2"></i>Đơn đã gửi bếp!';
 
+    /* Hide desktop placeholder so status sections fill the right column */
+    var placeholder = document.getElementById('right-col-placeholder');
+    if (placeholder) placeholder.style.display = 'none';
+
     function revealSection(elem, delayMs) {
       setTimeout(function () {
         elem.classList.remove('hidden');
