@@ -239,10 +239,109 @@ a {
    RESPONSIVE — KITCHEN tablet landscape (768px – 1280px)
 ══════════════════════════════════════════════════════════ */
 @media (max-width: 960px) {
-  /* Tighten KPI gap on narrower tablets */
   #kpi-row { gap: 10px; padding: 12px 16px; }
 }
 @media (min-width: 768px) {
-  /* Kitchen always fills the viewport — no scroll on outer body */
+  /* Lock viewport — panels scroll internally */
   body.bg-kitchen-bg { overflow: hidden; height: 100vh; }
+}
+
+/* ══════════════════════════════════════════════════════════
+   RESPONSIVE — KITCHEN mobile phone (< 768px portrait)
+══════════════════════════════════════════════════════════ */
+@media (max-width: 767px) {
+
+  /* ── Body: natural document scroll ────────────────────── */
+  body.bg-kitchen-bg {
+    height: auto !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+  }
+
+  /* ── KPI cards: compact 3-column ──────────────────────── */
+  #kpi-row article { padding: 10px !important; }
+  #kpi-orders, #kpi-tables, #kpi-bells { font-size: 1.875rem !important; }
+  #kpi-row .text-5xl { font-size: 1.875rem !important; }
+
+  /* ── Main grid: single column, natural height ──────────── */
+  .kitchen-main-grid {
+    flex: none !important;
+    min-height: auto !important;
+  }
+
+  /* ── Orders panel: full width, auto height ─────────────── */
+  #section-orders {
+    overflow: visible !important;
+    height: auto !important;
+    max-height: none !important;
+    min-height: auto !important;
+  }
+
+  #orders-list {
+    overflow: visible !important;
+    flex: none !important;
+    height: auto !important;
+    max-height: none !important;
+  }
+
+  /* ── Column headers: pointless without table layout ─────── */
+  .kitchen-col-headers { display: none !important; }
+
+  /* ── Dish rows: vertical card instead of 12-col grid ────── */
+  .dish-row {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 10px !important;
+    padding: 14px 14px !important;
+  }
+
+  /* ── Serve button: full width, centered ─────────────────── */
+  .btn-serve {
+    width: 100% !important;
+    justify-content: center !important;
+    min-height: 48px !important;
+  }
+
+  /* ── Sidebar: full width, natural height ────────────────── */
+  .kitchen-sidebar {
+    flex: none !important;
+    min-height: auto !important;
+  }
+
+  #section-bells,
+  #section-inventory {
+    flex: none !important;
+    height: auto !important;
+    overflow: visible !important;
+    max-height: none !important;
+  }
+
+  #bell-list,
+  #inventory-list {
+    overflow: visible !important;
+    height: auto !important;
+    flex: none !important;
+  }
+
+  /* ── Quick inventory buttons: horizontal row ─────────────── */
+  #quick-inv-btns {
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    justify-content: flex-end !important;
+    bottom: 12px !important;
+    right: 10px !important;
+    left: 10px !important;
+    max-width: none !important;
+  }
+
+  #quick-inv-btns button {
+    font-size: 11px !important;
+    padding: 6px 10px !important;
+    min-height: 34px !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.4) !important;
+  }
+
+  /* Bottom padding so quick buttons don't cover inventory list */
+  .kitchen-sidebar { padding-bottom: 70px; }
 }
