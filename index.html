@@ -39,8 +39,6 @@
         <i class="fa-solid fa-bowl-hot"></i>
       </div>
       <h1 class="text-white text-5xl font-black tracking-tight">Phở 10</h1>
-      <p class="text-red-200 text-lg mt-2 font-medium">Hệ thống đồng bộ nhà hàng</p>
-      <p class="text-red-400 text-xs mt-1 uppercase tracking-widest">Digital Transformation MVP</p>
     </header>
 
     <!-- Role Selection -->
@@ -83,9 +81,33 @@
       </div>
     </section>
 
-    <footer class="text-center mt-10 space-y-1">
+    <!-- PWA Install — Android/Chrome: shows when beforeinstallprompt fires -->
+    <div id="pwa-install-wrap" class="mt-6 hidden">
+      <button id="btn-install"
+              class="w-full flex items-center justify-center gap-2.5
+                     bg-white/15 hover:bg-white/25 active:scale-95
+                     text-white font-semibold py-3.5 rounded-2xl
+                     border border-white/30 transition-all duration-150">
+        <i class="fa-solid fa-download"></i>
+        Tải về điện thoại
+      </button>
+    </div>
+
+    <!-- PWA Install — iOS Safari: shows static hint -->
+    <div id="pwa-install-ios" class="mt-6 hidden">
+      <div class="bg-white/15 border border-white/30 rounded-2xl px-4 py-3.5 text-center">
+        <p class="text-white text-sm font-semibold mb-1.5">
+          <i class="fa-solid fa-download mr-1.5"></i>Tải về điện thoại
+        </p>
+        <p class="text-red-200 text-xs leading-relaxed">
+          Nhấn <i class="fa-solid fa-arrow-up-from-bracket mx-0.5"></i>
+          &rarr; <strong>"Thêm vào màn hình chính"</strong>
+        </p>
+      </div>
+    </div>
+
+    <footer class="text-center mt-8">
       <p class="text-red-400 text-xs">Digital Transformation · Final Group 5</p>
-      <p class="text-red-500 text-xs">Chạy hoàn toàn trên trình duyệt · Không cần backend</p>
     </footer>
 
   </main>
@@ -95,6 +117,37 @@
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/sw.js').catch(function () {});
     }
+  </script>
+  <script>
+  (function () {
+    if (window.matchMedia('(display-mode: standalone)').matches) return;
+
+    var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    if (isIOS) {
+      document.getElementById('pwa-install-ios').classList.remove('hidden');
+      return;
+    }
+
+    var deferredPrompt;
+    window.addEventListener('beforeinstallprompt', function (e) {
+      e.preventDefault();
+      deferredPrompt = e;
+      document.getElementById('pwa-install-wrap').classList.remove('hidden');
+    });
+
+    document.getElementById('btn-install').addEventListener('click', function () {
+      if (!deferredPrompt) return;
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then(function () {
+        deferredPrompt = null;
+        document.getElementById('pwa-install-wrap').classList.add('hidden');
+      });
+    });
+
+    window.addEventListener('appinstalled', function () {
+      document.getElementById('pwa-install-wrap').classList.add('hidden');
+    });
+  })();
   </script>
 </body>
 </html>
