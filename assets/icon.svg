@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Full red background — fills entire square for maskable icon safe zone -->
+  <rect width="512" height="512" fill="#D62828"/>
+  <!-- Bowl body -->
+  <path d="M116 252 Q116 388 256 388 Q396 388 396 252Z" fill="white"/>
+  <!-- Bowl rim -->
+  <ellipse cx="256" cy="252" rx="140" ry="26" fill="white"/>
+  <!-- Inner rim depth -->
+  <ellipse cx="256" cy="252" rx="128" ry="18" fill="#EF8080"/>
+  <!-- Noodle lines -->
+  <path d="M156 272 Q200 258 256 274 Q312 290 356 272"
+        stroke="#D62828" stroke-width="10" fill="none" stroke-linecap="round"/>
+  <path d="M168 298 Q210 284 256 298 Q302 312 344 298"
+        stroke="#D62828" stroke-width="8" fill="none" stroke-linecap="round"/>
+  <!-- Steam (wavy lines) -->
+  <path d="M196 224 Q183 198 196 172 Q209 146 196 120"
+        stroke="white" stroke-width="13" fill="none" stroke-linecap="round"/>
+  <path d="M256 214 Q243 188 256 162 Q269 136 256 110"
+        stroke="white" stroke-width="13" fill="none" stroke-linecap="round"/>
+  <path d="M316 224 Q303 198 316 172 Q329 146 316 120"
+        stroke="white" stroke-width="13" fill="none" stroke-linecap="round"/>
+</svg>

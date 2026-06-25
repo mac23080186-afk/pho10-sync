@@ -5,6 +5,7 @@
 
 # Firebase Admin SDK service account key (server-side only, NEVER browser)
 *.json
+!manifest.json
 .env
 .env.*
 

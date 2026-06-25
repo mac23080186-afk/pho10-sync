@@ -1,0 +1,19 @@
+{
+  "name": "Phở 10 Sync",
+  "short_name": "Phở 10",
+  "description": "Hệ thống đồng bộ nhà hàng Phở 10",
+  "theme_color": "#D62828",
+  "background_color": "#D62828",
+  "display": "standalone",
+  "orientation": "any",
+  "start_url": "/",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "/assets/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
