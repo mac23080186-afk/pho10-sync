@@ -1,6 +1,6 @@
 /* Phở 10 Sync — Service Worker v1 */
 
-const CACHE_NAME = 'pho10-cache-v1';
+const CACHE_NAME = 'pho10-cache-v2';
 
 const STATIC_ASSETS = [
   '/',
