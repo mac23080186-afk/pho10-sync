@@ -81,28 +81,19 @@
       </div>
     </section>
 
-    <!-- PWA Install — Android/Chrome: shows when beforeinstallprompt fires -->
-    <div id="pwa-install-wrap" class="mt-6 hidden">
+    <!-- PWA Install — always visible, handles all devices on click -->
+    <div class="mt-6">
       <button id="btn-install"
               class="w-full flex items-center justify-center gap-2.5
                      bg-white/15 hover:bg-white/25 active:scale-95
                      text-white font-semibold py-3.5 rounded-2xl
                      border border-white/30 transition-all duration-150">
         <i class="fa-solid fa-download"></i>
-        Tải về điện thoại
+        <span id="btn-install-label">Tải về điện thoại</span>
       </button>
-    </div>
-
-    <!-- PWA Install — iOS Safari: shows static hint -->
-    <div id="pwa-install-ios" class="mt-6 hidden">
-      <div class="bg-white/15 border border-white/30 rounded-2xl px-4 py-3.5 text-center">
-        <p class="text-white text-sm font-semibold mb-1.5">
-          <i class="fa-solid fa-download mr-1.5"></i>Tải về điện thoại
-        </p>
-        <p class="text-red-200 text-xs leading-relaxed">
-          Nhấn <i class="fa-solid fa-arrow-up-from-bracket mx-0.5"></i>
-          &rarr; <strong>"Thêm vào màn hình chính"</strong>
-        </p>
+      <!-- Instruction hint — shown below button after click -->
+      <div id="install-hint" class="hidden mt-3 bg-white/15 border border-white/30 rounded-2xl px-4 py-3 text-center">
+        <p id="install-hint-text" class="text-red-200 text-xs leading-relaxed"></p>
       </div>
     </div>
 
@@ -120,33 +111,53 @@
   </script>
   <script>
   (function () {
-    if (window.matchMedia('(display-mode: standalone)').matches) return;
+    var btnEl   = document.getElementById('btn-install');
+    var labelEl = document.getElementById('btn-install-label');
+    var hintEl  = document.getElementById('install-hint');
+    var hintTxt = document.getElementById('install-hint-text');
 
-    var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-    if (isIOS) {
-      document.getElementById('pwa-install-ios').classList.remove('hidden');
-      return;
+    var deferredPrompt = null;
+    var isIOS       = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    var isStandalone = window.matchMedia('(display-mode: standalone)').matches;
+
+    if (isStandalone) {
+      labelEl.textContent = 'Đã cài đặt trên thiết bị này';
     }
 
-    var deferredPrompt;
     window.addEventListener('beforeinstallprompt', function (e) {
       e.preventDefault();
       deferredPrompt = e;
-      document.getElementById('pwa-install-wrap').classList.remove('hidden');
     });
 
-    document.getElementById('btn-install').addEventListener('click', function () {
-      if (!deferredPrompt) return;
-      deferredPrompt.prompt();
-      deferredPrompt.userChoice.then(function () {
-        deferredPrompt = null;
-        document.getElementById('pwa-install-wrap').classList.add('hidden');
-      });
+    btnEl.addEventListener('click', function () {
+      if (isStandalone) {
+        showHint('Đã cài đặt rồi, mở từ màn hình chính để dùng nhé!');
+        return;
+      }
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then(function () { deferredPrompt = null; });
+        return;
+      }
+      if (isIOS) {
+        hintTxt.innerHTML =
+          'Nhấn biểu tượng <i class="fa-solid fa-arrow-up-from-bracket mx-1"></i>' +
+          ' rồi chọn <strong>""Thêm vào màn hình chính""</strong>';
+        hintEl.classList.remove('hidden');
+        return;
+      }
+      showHint('Mở menu trình duyệt (dấu 3 chấm) → "Cài đặt ứng dụng" hoặc "Thêm vào màn hình chính".');
     });
 
     window.addEventListener('appinstalled', function () {
-      document.getElementById('pwa-install-wrap').classList.add('hidden');
+      labelEl.textContent = 'Đã cài đặt thành công!';
+      hintEl.classList.add('hidden');
     });
+
+    function showHint(msg) {
+      hintTxt.textContent = msg;
+      hintEl.classList.remove('hidden');
+    }
   })();
   </script>
 </body>
